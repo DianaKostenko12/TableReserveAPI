@@ -16,6 +16,7 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), a => a.MigrationsAssembly("DAL"));
 });
 
+
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
