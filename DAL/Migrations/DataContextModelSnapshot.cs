@@ -36,9 +36,6 @@ namespace DAL.Migrations
                     b.Property<int>("NumberOfGuests")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
-
                     b.Property<int>("TableId")
                         .HasColumnType("int");
 

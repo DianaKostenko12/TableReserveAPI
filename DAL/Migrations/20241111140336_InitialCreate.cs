@@ -179,7 +179,6 @@ namespace DAL.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     TableId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     NumberOfGuests = table.Column<int>(type: "int", nullable: false),
                     UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
