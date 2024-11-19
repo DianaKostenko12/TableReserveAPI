@@ -1,5 +1,6 @@
 ﻿using DAL.Data;
 using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,43 +12,57 @@ namespace DAL.Repositories.Tables
     public class TableRepository : ITableRepository
     {
         private readonly DataContext _context;
+
         public TableRepository(DataContext context)
         {
             _context = context;
         }
 
-        public bool AddTable(Table table)
+        public async Task<bool> AddTableAsync(Table table)
         {
-            _context.Add(table);
-            return Save();
+            await _context.AddAsync(table);
+            return await SaveAsync();
         }
 
-        public IEnumerable<Table> GetTables()
+        public async Task<IEnumerable<Table>> GetTablesAsync()
         {
-            return _context.Tables.OrderBy(t => t.Id).ToList();
+            return await _context.Tables.ToListAsync();
         }
 
-        public Table GetById(int id)
+        public async Task<Table> GetByIdAsync(int id)
         {
-            return _context.Tables.Where(t => t.Id == id).FirstOrDefault();
+            return await _context.Tables.Where(t => t.Id == id).FirstOrDefaultAsync();
         }
 
-        public bool UpdateTable(Table table)
+        public async Task<bool> DeleteTableAsync(int id)
         {
-            _context.Update(table);
-            return Save();
+            var table = await _context.Tables.FindAsync(id);
+            if (table != null)
+            {
+                _context.Remove(table);
+                return await SaveAsync();
+            }
+            return false;
         }
 
-        public bool DeleteTable(int id)
+        public async Task<bool> SaveAsync()
         {
-            _context.Remove(id);
-            return Save();
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0;
         }
 
-        public bool Save()
+        public async Task<IEnumerable<Table>> GetFreeTablesAsync(DateTime date, int numberOfGuests)
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var freeTables = await _context.Tables
+                    .Where(t => t.Capacity >= numberOfGuests &&
+                                !t.Bookings.Any(b => b.Date.Date == date.Date)) 
+                    .ToListAsync();
+            return freeTables;
+        }
+
+        public async Task<bool> IsExistTable(string number)
+        {
+            return await _context.Tables.AnyAsync(t => t.Number == number);
         }
     }
 }

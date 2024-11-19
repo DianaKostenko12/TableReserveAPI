@@ -49,6 +49,8 @@ namespace BLL.Services.Auth
                 string message = string.Join(", ", result.Errors.Select(e => e.Description));
                 throw new BusinessException(HttpStatusCode.InternalServerError, message);
             }
+
+            await _userManager.AddToRoleAsync(registerUser, "User");
         }
 
         public async Task<string> LoginAsync(LoginDescriptor descriptor)

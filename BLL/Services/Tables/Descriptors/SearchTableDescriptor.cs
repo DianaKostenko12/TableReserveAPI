@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.Services.Bookings.Descriptors
+namespace BLL.Services.Tables.Descriptors
 {
-    public class CreateBookingDescriptor
+    public class SearchTableDescriptor
     {
         public DateTime Date { get; set; }
         public int NumberOfGuests { get; set; }
-        public int TableId { get; set; }
     }
 }

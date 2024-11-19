@@ -9,13 +9,13 @@ namespace DAL.Repositories.Bookings
 {
     public interface IBookingRepository
     {
-        IEnumerable<Booking> GetBookings();
-        IEnumerable<Booking> GetByUserId(string userId);
-        IEnumerable<Booking> GetBookingsByDateAndUser(DateTime date, string userId);
-        Booking GetById(int id);
-        bool AddBooking(Booking booking);
-        bool UpdateBooking(Booking booking);
-        bool DeleteBooking(int id);
-        bool Save();
+        Task<IEnumerable<Booking>> GetBookingsAsync();
+        Task<IEnumerable<Booking>> GetByUserIdAsync(string userId);
+        Task<IEnumerable<Booking>> GetBookingsByDateAsync(DateTime date);
+        Task<IEnumerable<Booking>> GetBookingsByDateAndUserAsync(DateTime date, string userId);
+        Task<Booking> GetByIdAsync(int id);
+        Task<bool> AddBookingAsync(Booking booking);
+        Task<bool> DeleteBookingAsync(int id);
+        Task<bool> SaveAsync();
     }
 }

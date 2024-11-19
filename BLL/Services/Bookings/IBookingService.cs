@@ -10,10 +10,10 @@ namespace BLL.Services.Bookings
 {
     public interface IBookingService
     {
-        Task AddBookingAsync(CreateBookingDescriptor descriptor);
-        Task DeleteBookingAsync(int bookingId);
-        Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(string userId);
-        Task UpdateBookingAsync(Booking newBooking);
+        Task AddBookingAsync(CreateBookingDescriptor descriptor, int userId);
+        Task DeleteBookingAsync(int bookingId, int userId);
+        Task<IEnumerable<Booking>> GetBookingsByDateAsync(DateTime date);
         Task<IEnumerable<Booking>> GetAllBookingsAsync();
+        Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(int userId);
     }
 }

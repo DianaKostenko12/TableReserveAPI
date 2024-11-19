@@ -9,11 +9,12 @@ namespace DAL.Repositories.Tables
 {
     public interface ITableRepository
     {
-        IEnumerable<Table> GetTables();
-        Table GetById(int id);
-        bool AddTable(Table table);
-        bool UpdateTable(Table table);
-        bool DeleteTable(int id);
-        bool Save();
+        Task<IEnumerable<Table>> GetTablesAsync();
+        Task<Table> GetByIdAsync(int id);
+        Task<IEnumerable<Table>> GetFreeTablesAsync(DateTime date, int numberOfGuests);
+        Task<bool> AddTableAsync(Table table);
+        Task<bool> DeleteTableAsync(int id);
+        Task<bool> IsExistTable(string number);
+        Task<bool> SaveAsync();
     }
 }

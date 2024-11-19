@@ -4,7 +4,6 @@ namespace TableReserveAPI.DTOs
 {
     public class LoginRequest
     {
-        [EmailAddress]
         [Required(ErrorMessage = "Username is required")]
         public string UserName { get; set; }
 

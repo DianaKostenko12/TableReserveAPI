@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL.Repositories.Bookings
@@ -17,52 +16,61 @@ namespace DAL.Repositories.Bookings
             _context = context;
         }
 
-        public bool AddBooking(Booking booking)
+        public async Task<bool> AddBookingAsync(Booking booking)
         {
-            _context.Add(booking);
-            return Save();
+            await _context.AddAsync(booking);
+            return await SaveAsync();
         }
 
-        public IEnumerable<Booking> GetByUserId(string userId)
+        public async Task<IEnumerable<Booking>> GetByUserIdAsync(string userId)
         {
-            return _context.Bookings
-                    .Where(u => u.User.Id == userId)
-                    .ToList();
+            return await _context.Bookings
+                .Where(u => u.User.Id == userId)
+                .ToListAsync();
         }
 
-        public IEnumerable<Booking> GetBookings()
+        public async Task<IEnumerable<Booking>> GetBookingsAsync()
         {
-            return _context.Bookings.ToList();
+            return await _context.Bookings.ToListAsync();
         }
 
-        public Booking GetById(int id)
+        public async Task<Booking> GetByIdAsync(int id)
         {
-            return _context.Bookings.Where(t => t.Id == id).FirstOrDefault();
+            return await _context.Bookings
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync();
         }
 
-        public IEnumerable<Booking> GetBookingsByDateAndUser(DateTime date, string userId)
+        public async Task<IEnumerable<Booking>> GetBookingsByDateAsync(DateTime date)
         {
-            return _context.Bookings
-                .Where(b => b.Date == date && b.User.Id == userId)
-                .ToList();
+            return await _context.Bookings
+                .Where(b => b.Date.Date == date.Date)
+                .ToListAsync();
         }
 
-        public bool UpdateBooking(Booking booking)
+        public async Task<IEnumerable<Booking>> GetBookingsByDateAndUserAsync(DateTime date, string userId)
         {
-            _context.Update(booking);
-            return Save();
+            return await _context.Bookings
+                .Where(b => b.Date.Date == date.Date && b.User.Id == userId)
+                .ToListAsync();
         }
 
-        public bool DeleteBooking(int id)
+        public async Task<bool> DeleteBookingAsync(int id)
         {
-            _context.Remove(id);
-            return Save();
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking == null)
+            {
+                return false;
+            }
+
+            _context.Bookings.Remove(booking);
+            return await SaveAsync();
         }
 
-        public bool Save()
+        public async Task<bool> SaveAsync()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0;
         }
     }
 }
