@@ -1,17 +1,13 @@
 ﻿using BLL.Services.Auth.Descriptors;
-using DAL.Models;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using DAL.Exceptions;
+using DAL.Models;
 using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Security.Claims;
+using System.Text;
 
 namespace BLL.Services.Auth
 {
@@ -71,26 +67,22 @@ namespace BLL.Services.Auth
             };
             authClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-            var accessToken = GenerateAccessToken(authClaims);
+            JwtSecurityToken accessToken = GenerateAccessToken(authClaims);
 
-           return accessToken;
+           return new JwtSecurityTokenHandler().WriteToken(accessToken);
         }
 
-        private string GenerateAccessToken(List<Claim> authClaims)
+        private JwtSecurityToken GenerateAccessToken(List<Claim> authClaims)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                claims: authClaims,
+            return new JwtSecurityToken(
+                issuer: _configuration.GetSection("AppSettings:ValidIssuer").Value,
+                audience: _configuration.GetSection("AppSettings:ValidAudience").Value,
                 expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds);
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            );
         }
     }
 }

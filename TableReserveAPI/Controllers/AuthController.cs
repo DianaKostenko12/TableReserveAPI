@@ -3,7 +3,6 @@ using BLL.Services.Auth;
 using BLL.Services.Auth.Descriptors;
 using Microsoft.AspNetCore.Mvc;
 using TableReserveAPI.DTOs;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TableReserveAPI.Controllers
 {

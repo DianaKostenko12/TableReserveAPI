@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
-using BLL.Services.Bookings.Descriptors;
 using BLL.Services.Tables.Descriptors;
+using DAL.Exceptions;
 using DAL.Models;
-using DAL.Repositories.Bookings;
 using DAL.Repositories.Tables;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 
 namespace BLL.Services.Tables
 {
@@ -30,12 +24,14 @@ namespace BLL.Services.Tables
                 throw new ArgumentNullException(nameof(descriptor));
 
             var existingTable = await _tableRepository.IsExistTable(descriptor.Number);
-            if (!existingTable)
+            if (existingTable)
             {
-                var tableToCreate = _mapper.Map<Table>(descriptor);
-                await _tableRepository.AddTableAsync(tableToCreate);
-                await _tableRepository.SaveAsync();
+                throw new BusinessException(HttpStatusCode.Conflict, $"Table with number {descriptor.Number} already exists.");
             }
+
+            var tableToCreate = _mapper.Map<Table>(descriptor);
+            await _tableRepository.AddTableAsync(tableToCreate);
+            await _tableRepository.SaveAsync();
         }
 
         public async Task DeleteTableAsync(int tableId)
@@ -43,7 +39,7 @@ namespace BLL.Services.Tables
             var tableToDelete = await _tableRepository.GetByIdAsync(tableId);
             if (tableToDelete == null)
             {
-                throw new KeyNotFoundException($"Table with ID {tableId} was not found.");
+                throw new BusinessException(HttpStatusCode.NotFound, $"Table with ID {tableId} was not found.");
             }
 
             await _tableRepository.DeleteTableAsync(tableId);
@@ -52,7 +48,17 @@ namespace BLL.Services.Tables
 
         public async Task<IEnumerable<Table>> GetFreeTablesAsync(SearchTableDescriptor descriptor)
         {
-           return await _tableRepository.GetFreeTablesAsync(descriptor.Date, descriptor.NumberOfGuests);
+            if (descriptor == null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            if (descriptor.Date.Date < DateTime.UtcNow.Date)
+            {
+                throw new BusinessException(HttpStatusCode.BadRequest, "Cannot search for free tables for a past date.");
+            }
+
+            return await _tableRepository.GetFreeTablesAsync(descriptor.Date, descriptor.NumberOfGuests);
         }
 
         public async Task<IEnumerable<Table>> GetTablesAsync()

@@ -4,6 +4,7 @@ using BLL.Services.Tables.Descriptors;
 using DAL.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using TableReserveAPI.DTOs;
 
 namespace TableReserveAPI.Controllers
 {
@@ -68,7 +69,8 @@ namespace TableReserveAPI.Controllers
             try
             {
                 var freeTables = await _tableService.GetFreeTablesAsync(descriptor);
-                return Ok(freeTables);
+                var tablesDto = _mapper.Map<List<TableResponse>>(freeTables);
+                return Ok(tablesDto);
             }
             catch (BusinessException ex)
             {
@@ -86,7 +88,8 @@ namespace TableReserveAPI.Controllers
             try
             {
                 var tables = await _tableService.GetTablesAsync();
-                return Ok(tables);
+                var tablesDto = _mapper.Map<List<TableResponse>>(tables);
+                return Ok(tablesDto);
             }
             catch (BusinessException ex)
             {

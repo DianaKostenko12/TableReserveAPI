@@ -1,10 +1,6 @@
 ﻿using DAL.Data;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DAL.Repositories.Bookings
 {
@@ -26,18 +22,24 @@ namespace DAL.Repositories.Bookings
         {
             return await _context.Bookings
                 .Where(u => u.User.Id == userId)
+                .Include(u => u.User)
+                .Include(t => t.Table)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Booking>> GetBookingsAsync()
         {
-            return await _context.Bookings.ToListAsync();
+            return await _context.Bookings
+                .Include(b => b.User)
+                .Include(t => t.Table)
+                .ToListAsync();
         }
 
         public async Task<Booking> GetByIdAsync(int id)
         {
             return await _context.Bookings
-                .Where(t => t.Id == id)
+                .Where(b => b.Id == id)
+                .Include(b => b.User)
                 .FirstOrDefaultAsync();
         }
 
@@ -45,6 +47,8 @@ namespace DAL.Repositories.Bookings
         {
             return await _context.Bookings
                 .Where(b => b.Date.Date == date.Date)
+                .Include(b => b.User)
+                .Include (t => t.Table)
                 .ToListAsync();
         }
 

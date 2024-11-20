@@ -51,7 +51,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Table", b =>
@@ -70,7 +70,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tables");
+                    b.ToTable("Tables", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>

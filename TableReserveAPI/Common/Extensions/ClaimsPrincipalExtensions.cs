@@ -4,16 +4,10 @@ namespace TableReserveAPI.Common.Extensions
 {
     public static class ClaimsPrincipalExtensions
     {
-        public static int GetUserId(this ClaimsPrincipal principal)
+        public static string GetUserId(this ClaimsPrincipal principal)
         {
             var userIdString = GetInfoByDataName(principal, "userId");
-
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                throw new Exception($"Unable to parse userId '{userIdString}' to an integer.");
-            }
-
-            return userId;
+            return userIdString;
         }
 
         private static string GetInfoByDataName(ClaimsPrincipal principal, string name)

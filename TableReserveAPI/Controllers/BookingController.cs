@@ -5,6 +5,7 @@ using DAL.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableReserveAPI.Common.Extensions;
+using TableReserveAPI.DTOs;
 
 namespace TableReserveAPI.Controllers
 {
@@ -26,20 +27,22 @@ namespace TableReserveAPI.Controllers
         public async Task<IActionResult> GetAllBookings()
         {
             var bookings = await _bookingService.GetAllBookingsAsync();
-            return Ok(bookings);
+            var bookingsDto = _mapper.Map<List<BookingResponse>>(bookings);
+            return Ok(bookingsDto);
         }
 
         [HttpGet("{date}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetBookingsByDate(DateTime date)
         {
             var bookings = await _bookingService.GetBookingsByDateAsync(date);
-            return Ok(bookings);
+            var bookingsDto = _mapper.Map<List<BookingResponse>>(bookings);
+            return Ok(bookingsDto);
         }
 
         [HttpPost, Authorize]
         public async Task<IActionResult> AddBooking([FromBody] CreateBookingDescriptor descriptor)
         {
-            int userId = _httpContextAccessor.HttpContext.User.GetUserId();
+            string userId = _httpContextAccessor.HttpContext.User.GetUserId();
             try
             {
                 await _bookingService.AddBookingAsync(descriptor, userId);
@@ -54,7 +57,7 @@ namespace TableReserveAPI.Controllers
         [HttpDelete, Authorize]
         public async Task<IActionResult> DeleteBooking(int bookingId)
         {
-            int userId = _httpContextAccessor.HttpContext.User.GetUserId();
+            string userId = _httpContextAccessor.HttpContext.User.GetUserId();
             try
             {
                 await _bookingService.DeleteBookingAsync(bookingId, userId);
@@ -69,11 +72,12 @@ namespace TableReserveAPI.Controllers
         [HttpGet("byUserId"), Authorize]
         public async Task<IActionResult> GetBookingsByUserIdAsync()
         {
-            int userId = _httpContextAccessor.HttpContext.User.GetUserId();
+            string userId = _httpContextAccessor.HttpContext.User.GetUserId();
             try
             {
                 var bookings = await _bookingService.GetBookingsByUserIdAsync(userId);
-                return Ok(bookings);
+                var bookingsDto = _mapper.Map<List<BookingResponse>>(bookings);
+                return Ok(bookingsDto);
             }
             catch (BusinessException ex)
             {
