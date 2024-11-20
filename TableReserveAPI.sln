@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableReserveAPI", "TableReserveAPI\TableReserveAPI.csproj", "{1677C412-FEE7-41ED-A6D7-C722C7EFB1A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableReserveAPI", "TableReserveAPI\TableReserveAPI.csproj", "{1677C412-FEE7-41ED-A6D7-C722C7EFB1A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{3BA3A4CC-9247-442C-9333-D6E4140C7A35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{3BA3A4CC-9247-442C-9333-D6E4140C7A35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{E49A10B0-316E-48A3-8E40-290F266BB71C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{E49A10B0-316E-48A3-8E40-290F266BB71C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
