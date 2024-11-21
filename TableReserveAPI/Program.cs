@@ -1,6 +1,7 @@
 using BLL.Services.Auth;
 using BLL.Services.Bookings;
 using BLL.Services.Tables;
+using BLL.Services.Users;
 using DAL.Data;
 using DAL.Models;
 using DAL.Repositories.Bookings;
@@ -57,6 +58,7 @@ builder.Services.AddScoped<ITableRepository, TableRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<ITableService, TableService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAuthentication(options =>
 {

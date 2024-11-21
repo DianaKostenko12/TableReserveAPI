@@ -2,12 +2,14 @@
 using BLL.Services.Tables;
 using BLL.Services.Tables.Descriptors;
 using DAL.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using TableReserveAPI.DTOs;
 
 namespace TableReserveAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController, Route("table")]
     public class TableController : ControllerBase
     {

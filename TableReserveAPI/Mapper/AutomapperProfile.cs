@@ -19,6 +19,7 @@ namespace TableReserveAPI.Mapper
                 .ForMember(dest => dest.Number, opt => opt.MapFrom(dest => dest.Table.Number));
 
             CreateMap<Table, TableResponse>();
+            CreateMap<User, UserResponse>();
         }
     }
 }
