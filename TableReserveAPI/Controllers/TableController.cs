@@ -9,7 +9,6 @@ using TableReserveAPI.DTOs;
 
 namespace TableReserveAPI.Controllers
 {
-    [Authorize(Roles = "Admin")]
     [ApiController, Route("table")]
     public class TableController : ControllerBase
     {
@@ -23,7 +22,7 @@ namespace TableReserveAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddTable([FromBody] CreateTableDescriptor descriptor)
         {
             if (descriptor == null)
@@ -46,7 +45,7 @@ namespace TableReserveAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete, Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTable(int tableId)
         {
             try
